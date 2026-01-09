@@ -1,5 +1,4 @@
-using Project;
-using Project.UI;
+namespace Project;
 
 public class MenuList
 {

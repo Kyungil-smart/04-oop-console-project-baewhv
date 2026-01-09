@@ -1,4 +1,4 @@
-﻿namespace Project.UI;
+﻿namespace Project;
 
 public class Border
 {
