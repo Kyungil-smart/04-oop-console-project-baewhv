@@ -1,1 +1,10 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=22157929&assignment_repo_type=AssignmentRepo)
+# 제목
+- 그래서 녹색옷이....
+# 생각해볼 기능
+- 충돌체
+- 캐릭터그룹? 이미지?
+  - 캐릭터 타입 하나에 좌표가 있게끔.
+- 테두리를 이용한 3개의 UI
+  - Screen -> 맵과 체력, 마나 표시
+  - PlayerInfo -> 플레이어 캐릭터의 정보를 간략하게 표시
+  - ChatScreen -> 상호작용 시 설명문구가 출력될 영역
