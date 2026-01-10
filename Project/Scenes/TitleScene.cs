@@ -2,7 +2,7 @@
 
 public class TitleScene : Scene
 {
-    private MenuList _titleMenu;
+    private SelectList _titleMenu;
 
     public TitleScene()
     {
@@ -11,7 +11,7 @@ public class TitleScene : Scene
 
     public void Init()
     {
-        _titleMenu = new MenuList();
+        _titleMenu = new SelectList();
         _titleMenu.Add("게임 시작", GameStart);
         _titleMenu.Add("크레딧", ViewCredits);
         _titleMenu.Add("게임 종료", GameQuit);
