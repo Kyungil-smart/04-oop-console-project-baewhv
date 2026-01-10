@@ -12,7 +12,6 @@ public class GameManager
         
         while (!IsGameOver)
         {
-            Console.Clear();
             SceneManager.Render();
             InputManager.GetUserInput();
 

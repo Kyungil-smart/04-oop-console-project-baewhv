@@ -1,6 +1,6 @@
 namespace Project;
 
-public class MenuList
+public class SelectList
 {
     private List<(string text, Action action)> _menus;
     private int _currentIndex;
@@ -10,7 +10,7 @@ public class MenuList
     private int _maxLength;
     
 
-    public MenuList(params (string, Action)[] menuTexts)
+    public SelectList(params (string, Action)[] menuTexts)
     {
         if (menuTexts.Length == 0)
         {
@@ -21,6 +21,18 @@ public class MenuList
             _menus = menuTexts.ToList();
         }
         _border = new Border(width: _maxLength +4, height: _menus.Count + 2);
+    }
+    public void Add(string text, Action action)
+    {
+        _menus.Add((text, action));
+
+        int textWidth = text.GetTextWidth();
+        if (_maxLength < textWidth)
+        {
+            _maxLength = textWidth;
+        }
+        _border.Width = _maxLength;
+        _border.Height++;
     }
 
     public void Remove()
@@ -58,19 +70,6 @@ public class MenuList
             _currentIndex = _menus.Count - 1;
     }
 
-    public void Add(string text, Action action)
-    {
-        _menus.Add((text, action));
-
-        int textWidth = text.GetTextWidth();
-        if (_maxLength < textWidth)
-        {
-            _maxLength = textWidth;
-        }
-        _border.Width = _maxLength + 6;
-        _border.Height++;
-    }
-
     public void SelectUp()
     {
         _currentIndex--;
@@ -93,12 +92,11 @@ public class MenuList
         for (int i = 0; i < _menus.Count; i++)
         {
             y++;
-            Console.SetCursorPosition(x+1, y);
+            Console.SetCursorPosition(x+2, y);
             if (i == _currentIndex)
             {
                 "->".Print(ConsoleColor.Green);
                 _menus[i].text.Print(ConsoleColor.Green);
-                continue;
             }
             else
             {

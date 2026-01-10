@@ -29,6 +29,7 @@ public static class SceneManager
     public static void Change(string key)
     {
         if (!_scenes.ContainsKey(key)) return;
+        Console.Clear();
         Change(_scenes[key]);
     }
     

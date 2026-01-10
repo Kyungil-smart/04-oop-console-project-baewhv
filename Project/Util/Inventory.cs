@@ -4,7 +4,7 @@ public class Inventory
 {
     private List<Item> _items = new List<Item>();
     public bool IsActive { get; set; }
-    public MenuList _itemMenu = new MenuList();
+    public SelectList _itemMenu = new SelectList();
     private PlayerCharacter _owner;
 
     public Inventory(PlayerCharacter owner)
