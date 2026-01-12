@@ -20,7 +20,7 @@ public class SelectList
         {
             _menus = menuTexts.ToList();
         }
-        _border = new Border(width: _maxLength +4, height: _menus.Count + 2);
+        _border = new Border(width: _maxLength +4, height: _menus.Count);
     }
     public void Add(string text, Action action)
     {
