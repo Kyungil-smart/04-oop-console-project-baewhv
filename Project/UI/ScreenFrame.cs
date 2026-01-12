@@ -12,21 +12,29 @@ public class ScreenFrame
     private HealthUI _healthUi;
     public Vector GetSize => _size;
 
-    public void SetData() //덮어쓰기가 아닌 강제로 칠할 부분.
+    public void SetData((int X, int Y) pos, char[] text)
     {
+        if (pos.X >= _size.X || pos.Y >= _size.Y || pos.X < 0 || pos.Y < 0) return;
+        _screen[pos.Y, pos.X][1] = '\0';
+        for (int i = 0; i < text.Length && i < _screen[pos.Y,pos.X].Length; i++)
+        {
+            _screen[pos.Y, pos.X][i] = text[i];
+        }
     }
 
     public ScreenFrame(PlayerCharacter player, Vector pos = null)
     {
         if (pos == null) pos = Vector.Zero;
+        _size = new Vector(33, 19);
         _screenBorder = new Border(pos, _size);
         _position = pos;
         _screen = new StringBuilder[_size.Y,_size.X];
-        for (int i = 0; i < _size.Y; i++)
+        for (int y = 0; y < _size.Y; y++)
         {
-            for (int j = 0; j < _size.X; j++)
+            for (int x = 0; x < _size.X; x++)
             {
-                _screen[i, j] = new StringBuilder("##",3);
+                _screen[y, x] = new StringBuilder(3);
+                _screen[y, x].Length = 2;
             }
         }
         _healthUi = new HealthUI();
@@ -42,14 +50,14 @@ public class ScreenFrame
 
     public void Render() //스크린 영역 랜더.
     {
-        for (int i = 0; i < _screen.GetLength(0); i++)
+        for (int y = 0; y < _screen.GetLength(0); y++)
         {
-            Console.SetCursorPosition(_position.X + 2, _position.Y + 1 + i);
-            for (int j = 0; j < _screen.GetLength(1); j++)
+            Console.SetCursorPosition(_position.X + 2, _position.Y + 1 + y);
+            for (int x = 0; x < _screen.GetLength(1); x++)
             {
-                for (int k = 0; k < _screen[i, j].Length; k++)
+                for (int k = 0; k < _screen[y, x].Length; k++)
                 {
-                    _screen[i,j][k].Print();    
+                    _screen[y,x][k].Print();    
                 }
             }
         }

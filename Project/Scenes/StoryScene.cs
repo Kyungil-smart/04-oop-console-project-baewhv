@@ -5,17 +5,25 @@ public class StoryScene : Scene
     private PlayerCharacter _player;
 
     private ScreenFrame _screenFrame;
+    private DialogFrame _dialogFrame;
+    private Map _townMap;
     public StoryScene(PlayerCharacter player) => Init(player);
 
     public void Init(PlayerCharacter player)
     {
         _player = player;
         _screenFrame = new ScreenFrame(_player);
+        _dialogFrame = new DialogFrame(new Vector(0,_screenFrame.GetSize.Y+2), new Vector(_screenFrame.GetSize.X, 5));
+        _townMap = new TownMap(Vector.Zero);
+
+        _player.Position = _townMap.StartPos;
+
     }
     
     public override void Enter()
     {
         _screenFrame.DrawUI();
+        _dialogFrame.DrawUI();
     }
 
     public override void Update()
@@ -26,6 +34,7 @@ public class StoryScene : Scene
     
     public override void Render()
     {
+        _townMap.SetScreen(_screenFrame, _player);
         _screenFrame.Render();
         //맵을 스크린에 등록
         //범위 내 오브젝트를 스크린에 등록
