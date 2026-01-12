@@ -9,6 +9,7 @@ public class TownMap : Map
         //SetObject();
         
         SetObject(new Potion(){ Name = "Potion", Position = new Vector(4,3)});
+        SetObject(new Sword(){ Name = "Sword", Position = new Vector(-4,3)});
         
     }
 }

@@ -8,19 +8,40 @@ public class ScreenFrame
     private Vector _position = Vector.Zero;
     private Border _screenBorder;
     private StringBuilder[,] _screen;
+    private ConsoleColor[,] _color;
 
     private HealthUI _healthUi;
     public Vector GetSize => _size;
 
-    public void SetData((int X, int Y) pos, char[] text)
+    public void SetData((int X, int Y) pos, char[] text, ConsoleColor color = ConsoleColor.White)
     {
         if (pos.X >= _size.X || pos.Y >= _size.Y || pos.X < 0 || pos.Y < 0) return;
-        _screen[pos.Y, pos.X][1] = '\0';
         for (int i = 0; i < text.Length && i < _screen[pos.Y,pos.X].Length; i++)
         {
             _screen[pos.Y, pos.X][i] = text[i];
         }
+        _color[pos.Y, pos.X] = color;
     }
+    public void SetData((int X, int Y) pos, StringBuilder text, ConsoleColor color = ConsoleColor.White)
+    {
+        if (pos.X >= _size.X || pos.Y >= _size.Y || pos.X < 0 || pos.Y < 0) return;
+        for (int i = 0; i < text.Length && i < _screen[pos.Y,pos.X].Length; i++)
+        {
+            //if (text[i] == '\0') text[i] = ' ';
+            _screen[pos.Y, pos.X][i] = text[i];
+        }
+        _color[pos.Y, pos.X] = color;
+    }
+
+    public void SetData(Vector pos, char[] text, ConsoleColor color)
+    {
+        SetData((pos.X, pos.Y), text, color);
+    }
+    public void SetData(Vector pos, StringBuilder text, ConsoleColor color = ConsoleColor.White)
+    {
+        SetData((pos.X, pos.Y), text, color);
+    }
+    
 
     public ScreenFrame(PlayerCharacter player, Vector pos = null)
     {
@@ -37,6 +58,7 @@ public class ScreenFrame
                 _screen[y, x].Length = 2;
             }
         }
+        _color = new ConsoleColor[_size.Y,_size.X];
         _healthUi = new HealthUI();
         _healthUi.Init(player, new Vector(1, _size.Y + 1));
     }
@@ -57,7 +79,7 @@ public class ScreenFrame
             {
                 for (int k = 0; k < _screen[y, x].Length; k++)
                 {
-                    _screen[y,x][k].Print();    
+                    _screen[y,x][k].Print(_color[y,x]);    
                 }
             }
         }

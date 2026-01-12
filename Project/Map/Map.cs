@@ -1,9 +1,14 @@
-﻿namespace Project;
+﻿using System.Text;
+
+namespace Project;
 
 public abstract class Map //배치할 월드 데이터
 {
     protected int _width;
     protected int _height;
+
+    private StringBuilder floor = new StringBuilder("  ");
+    private StringBuilder Outside = new StringBuilder("\u2591\u2591");
 
     public int GetMinWidth() => -((_width - 1) / 2);
     public int GetMaxWidth() => (_width - 1) / 2;
@@ -38,18 +43,39 @@ public abstract class Map //배치할 월드 데이터
         {
             for (int x = 0; x < frame.GetSize.X; x++)
             {
-                // -3 -2 -1 0 1 2 3
-
                 if (CheckRange(LeftMax + x, TopMax - y))
                 {
-                    frame.SetData((x, y), "  ".ToCharArray());
+                    frame.SetData((x, y), floor);
                 }
-                else 
+                else
                 {
-                    frame.SetData((x, y), "\u2588\u2588".ToCharArray());
+                    frame.SetData((x, y), Outside, ConsoleColor.DarkGray);
                 }
             }
         }
+        foreach (KeyValuePair<int, GameObject> obj in Objects)
+        {
+            Vector temp = obj.Value.Position;
+            if (temp.X >= LeftMax && temp.Y <= TopMax && temp.X <= LeftMax + frame.GetSize.X * 2 &&
+                temp.Y >= TopMax - frame.GetSize.Y * 2)
+            {
+                Vector pcToObj = obj.Value.Position - pc.Position;
+                pcToObj.Y *= -1;
+                temp = frame.GetSize / 2 + pcToObj;
+
+                for (int i = 0; i < obj.Value.shape.Length; i++)
+                {
+                    frame.SetData(temp+obj.Value.shape[i].Position, obj.Value.shape[i].Symbol, obj.Value.shape[i].Color);                    
+                }
+                
+            }
+        }
+
+        for (int i = 0; i < pc.shape.Length; i++)
+        {   
+            frame.SetData((frame.GetSize / 2) + pc.shape[i].Position, pc.shape[i].Symbol, pc.shape[i].Color);
+        }
+        
         
     }
 

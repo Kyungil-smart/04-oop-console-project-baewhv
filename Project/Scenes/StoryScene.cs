@@ -36,9 +36,7 @@ public class StoryScene : Scene
     {
         _townMap.SetScreen(_screenFrame, _player);
         _screenFrame.Render();
-        //맵을 스크린에 등록
-        //범위 내 오브젝트를 스크린에 등록
-        //렌더
+        _player.Render();
     }
 
     public override void Exit()

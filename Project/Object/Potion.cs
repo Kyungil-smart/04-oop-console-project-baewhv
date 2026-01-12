@@ -1,7 +1,15 @@
-﻿namespace Project;
+﻿using System.Text;
+
+namespace Project;
 
 public class Potion : Item, IInteractable
 {
+    public Potion()
+    {
+        shape = new Shape[1] ;
+        shape[0] = new Shape() { Position = Vector.Zero, Symbol = new StringBuilder("\u2620"), Type = CollisionType.None };
+    }
+    
     public override void Use()
     {
         Inventory.Remove(this);
@@ -10,7 +18,6 @@ public class Potion : Item, IInteractable
         Owner = null;
 
     }
-
     public void Interact(PlayerCharacter player)
     {
         player.AddItem(this);

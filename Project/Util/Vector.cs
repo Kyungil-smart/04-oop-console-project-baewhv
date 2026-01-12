@@ -18,8 +18,13 @@ public class Vector
     public static Vector Zero => new Vector(0, 0);
     public static Vector One => new Vector(1, 1);
 
+    public static Vector operator /(Vector a, int value)
+        => new (a.X / value, a.Y / value);
+
     public static Vector operator +(Vector a, Vector b)
-        => new Vector(a.X + b.X, a.Y + b.Y);
+        => new (a.X + b.X, a.Y + b.Y);
+    public static Vector operator -(Vector a, Vector b)
+        => new (a.X - b.X, a.Y - b.Y);
     
     
 
