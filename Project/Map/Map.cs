@@ -53,6 +53,7 @@ public abstract class Map //배치할 월드 데이터
                 }
             }
         }
+
         foreach (KeyValuePair<int, GameObject> obj in Objects)
         {
             Vector temp = obj.Value.Position;
@@ -65,18 +66,16 @@ public abstract class Map //배치할 월드 데이터
 
                 for (int i = 0; i < obj.Value.shape.Length; i++)
                 {
-                    frame.SetData(temp+obj.Value.shape[i].Position, obj.Value.shape[i].Symbol, obj.Value.shape[i].Color);                    
+                    frame.SetData(temp + obj.Value.shape[i].Position, obj.Value.shape[i].Symbol,
+                        obj.Value.shape[i].Color);
                 }
-                
             }
         }
 
         for (int i = 0; i < pc.shape.Length; i++)
-        {   
+        {
             frame.SetData((frame.GetSize / 2) + pc.shape[i].Position, pc.shape[i].Symbol, pc.shape[i].Color);
         }
-        
-        
     }
 
     public bool CheckRange(int x, int y)
@@ -85,5 +84,23 @@ public abstract class Map //배치할 월드 데이터
                x <= GetMaxWidth() &&
                y >= GetMinHeight() &&
                y <= GetMaxHeight();
+    }
+
+    public bool CheckMove(Vector pos)
+    {
+        if (!CheckRange(pos.X, pos.Y)) return false;
+        foreach (KeyValuePair<int, GameObject> obj in Objects)
+        {
+            foreach (Shape sp in obj.Value.shape)
+            {
+                if (sp.Position.Compare(pos) )
+                {
+                    if (sp.Type == CollisionType.Obstacle)
+                        return false;
+                    else return true;
+                }   
+            }
+        }
+        return true;
     }
 }

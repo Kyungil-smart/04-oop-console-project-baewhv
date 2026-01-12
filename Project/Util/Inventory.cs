@@ -16,7 +16,6 @@ public class Inventory
     {
         if (_items.Count >= 10) return;
         _items.Add(item);
-        //_itemMenu.Add(item.Name, () => { });
         _itemMenu.Add(item.Name, item.Use);
         item.Inventory = this;
         item.Owner = _owner;
@@ -31,7 +30,8 @@ public class Inventory
 
     public void Render()
     {
-        _itemMenu.Render(15,1);
+        if (!IsActive) return;
+        _itemMenu.Render(70,0);
     }
 
     public void Select()

@@ -8,7 +8,7 @@ public class PlayerCharacter : GameObject
 
     private Shape[] Faces;
     
-    //public Tile[,] Field { get; set; }
+    public Map _map { get; set; }
     private Inventory _inventory;
     public PlayerCharacter() => Init();
     private bool IsActiveControl;
@@ -85,12 +85,16 @@ public class PlayerCharacter : GameObject
 
     public void Move(Vector direction)
     {
-        if (!IsActiveControl) return;
+        if (_map == null || !IsActiveControl) return;
         Vector nextPos = Position + direction;
         Vector current = Position;
-        Position = nextPos;
+        if (_map.CheckMove(nextPos))
+        {
+            Position = nextPos;
         
-        Debug.LogWarning($"플레이어 이동 : ({current.X},{current.Y}) -> ({nextPos.X},{nextPos.Y})");
+            Debug.LogWarning($"플레이어 이동 : ({current.X},{current.Y}) -> ({nextPos.X},{nextPos.Y})");
+        }
+   
     }
 
     public void Render()

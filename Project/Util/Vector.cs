@@ -28,4 +28,9 @@ public class Vector
     
     
 
+    public bool Compare(Vector b)
+    {
+        return X == b.X && Y == b.Y;
+    }
+
 }
