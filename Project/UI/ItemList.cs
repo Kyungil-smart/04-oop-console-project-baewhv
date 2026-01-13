@@ -91,22 +91,34 @@ public class ItemList
         if (_currentIndex >= _menus.Count) _currentIndex = _menus.Count - 1;
     }
 
-    public void Render()
+    public void Render(bool isActive)
     {
+        if (isActive)
+            _border.Color = ConsoleColor.Green;
+        else
+            _border.DefaultColor();
         _border.Draw();
-        for (int i = 0; i < _menus.Count; i++)
+        for (int i = 0; i < 10; i++)
         {
             Console.SetCursorPosition(_pos.X + 2, _pos.Y + 1 + i);
-            if (i == _currentIndex)
+            if (_menus.Count > i)
             {
-                "->".Print(ConsoleColor.Green);
-                _menus[i].text.Print(ConsoleColor.Green);
+                if (isActive && i == _currentIndex)
+                {
+                    "->".Print(ConsoleColor.Green);
+                    _menus[i].text.Print(ConsoleColor.Green);
+                }
+                else
+                {
+                    Console.Write("  ");
+                    _menus[i].text.Print();
+                }
             }
             else
             {
-                Console.Write("  ");
-                _menus[i].text.Print();
+                "          ".Print();
             }
+
         }
     }
 }

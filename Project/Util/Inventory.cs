@@ -30,7 +30,7 @@ public class Inventory
 
     public void Render()
     {
-        _itemMenu.Render();
+        _itemMenu.Render(IsActive);
     }
 
     public void Select()

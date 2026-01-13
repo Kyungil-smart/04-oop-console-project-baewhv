@@ -21,5 +21,6 @@ public class Sword : Item, IInteractable
         icon.Visible = true;
         icon.Color = shape[0].Color;
         player.SkillFrame.Render();
+        player.HasWeapon = true;
     }
 }
