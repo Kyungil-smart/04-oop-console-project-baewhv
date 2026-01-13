@@ -8,8 +8,8 @@ public class TownMap : Map
         _height = 9;
         //SetObject();
         
-        SetObject(new Potion(){ Name = "Potion", Position = new Vector(4,3)});
-        SetObject(new Sword(){ Name = "Sword", Position = new Vector(-4,3)});
+        SetObject(new Potion(){ Name = "포션", Position = new Vector(4,3)});
+        SetObject(new Sword(){ Name = "미스터소드", Position = new Vector(-4,3)});
         
     }
 }
