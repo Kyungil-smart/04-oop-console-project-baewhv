@@ -8,7 +8,7 @@ public class PlayerCharacter : GameObject
 
     private Shape[] Faces;
     
-    public Map _map { get; set; }
+    public Map CurrentMap { get; set; }
     private Inventory _inventory;
     public PlayerCharacter() => Init();
     private bool IsActiveControl;
@@ -36,27 +36,20 @@ public class PlayerCharacter : GameObject
     {
         if (InputManager.GetKey(ConsoleKey.UpArrow))
         {
-            Move(Vector.Up);
+            Move(Direction.Up);
             _inventory.SelectUp();
-            shape[0] = Faces[0];
+            
         }
 
         if (InputManager.GetKey(ConsoleKey.DownArrow))
         {
-            Move(Vector.Down);
+            Move(Direction.Down);
             _inventory.SelectDown();
-            shape[0] = Faces[1];
         }
         if (InputManager.GetKey(ConsoleKey.LeftArrow))
-        {
-            Move(Vector.Left);
-            shape[0] = Faces[2];
-        }
+            Move(Direction.Left);
         if (InputManager.GetKey(ConsoleKey.RightArrow))
-        {
-            Move(Vector.Right);
-            shape[0] = Faces[3];
-        }
+            Move(Direction.Right);
         if (InputManager.GetKey(ConsoleKey.I))
         {
             HandleControl();
@@ -83,12 +76,29 @@ public class PlayerCharacter : GameObject
         IsActiveControl = !_inventory.IsActive;
     }
 
-    public void Move(Vector direction)
+    public void Move(Direction dir)
     {
-        if (_map == null || !IsActiveControl) return;
+        if (CurrentMap == null || !IsActiveControl) return;
+        Vector direction = Vector.Zero;
+        switch (dir)
+        {
+            case Direction.Up:
+                direction = Vector.Up;
+                break;
+            case Direction.Down:
+                direction = Vector.Down;
+                break;
+            case Direction.Left:
+                direction = Vector.Left;
+                break;
+            case Direction.Right:
+                direction = Vector.Right;
+                break;
+        }
+        shape[0] = Faces[(int)dir];
         Vector nextPos = Position + direction;
         Vector current = Position;
-        if (_map.CheckMove(nextPos))
+        if (CurrentMap.CheckMove(nextPos, this))
         {
             Position = nextPos;
         
