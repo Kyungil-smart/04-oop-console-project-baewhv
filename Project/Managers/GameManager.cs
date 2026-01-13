@@ -33,7 +33,6 @@ public class GameManager
         Console.CursorVisible = false;
         SceneManager.AddScene("TitleScene", new TitleScene());
         SceneManager.AddScene("TownScene", new StoryScene(_player));
-        SceneManager.AddScene("StoryScene", new StoryScene(_player));
         SceneManager.AddScene("Log", new LogScene());
         SceneManager.AddScene("Test", new LogScene());
         SceneManager.Change("TitleScene");
