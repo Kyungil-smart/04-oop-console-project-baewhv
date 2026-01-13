@@ -5,11 +5,16 @@ namespace Project;
 public class PlayerCharacter : GameObject
 {
     public ObservableProperty<int> _health = new ObservableProperty<int>(5);
-
     private Shape[] Faces;
+    private Direction _dir = Direction.Down;
     
     public Map CurrentMap { get; set; }
-    private Inventory _inventory;
+    
+    //UI
+    public DialogFrame DialogFrame{ get; set; }
+    public SkillFrame SkillFrame{ get; set; }
+    public Inventory _inventory { get; set; }
+    
     public PlayerCharacter() => Init();
     private bool IsActiveControl;
     public void Init()
@@ -25,10 +30,6 @@ public class PlayerCharacter : GameObject
         shape[1] = new Shape() { Position = new Vector(0,-1), Symbol = new StringBuilder("\u25e2\u25e3"), Color = ConsoleColor.Green};
         
         _inventory = new Inventory(this);
-        _inventory.Add(new Potion() {Name = "Potion 1"});
-        _inventory.Add(new Potion() {Name = "Potion 2"});
-        _inventory.Add(new Potion() {Name = "Potion 3"});
-        _inventory.Add(new Potion() {Name = "Potion 4"});
         IsActiveControl = true;
     }
 
@@ -68,6 +69,11 @@ public class PlayerCharacter : GameObject
             Heal(+1);
         }
 
+        if (InputManager.GetKey(ConsoleKey.F))
+        {
+             Interact();
+        }
+
     }
 
     public void HandleControl()
@@ -76,27 +82,24 @@ public class PlayerCharacter : GameObject
         IsActiveControl = !_inventory.IsActive;
     }
 
+    public void Interact()
+    {
+        KeyValuePair<int,GameObject> target =  CurrentMap.CheckObject(Position + Vector.GetDirectVector(_dir));
+        if (target.Value is IInteractable t)
+        {
+            t.Interact(this);
+            if(target.Value is Item)
+                CurrentMap.RemoveObject(target.Key);
+        }
+    }
+
     public void Move(Direction dir)
     {
         if (CurrentMap == null || !IsActiveControl) return;
-        Vector direction = Vector.Zero;
-        switch (dir)
-        {
-            case Direction.Up:
-                direction = Vector.Up;
-                break;
-            case Direction.Down:
-                direction = Vector.Down;
-                break;
-            case Direction.Left:
-                direction = Vector.Left;
-                break;
-            case Direction.Right:
-                direction = Vector.Right;
-                break;
-        }
+        _dir = dir;
+        
         shape[0] = Faces[(int)dir];
-        Vector nextPos = Position + direction;
+        Vector nextPos = Position + Vector.GetDirectVector(_dir);
         Vector current = Position;
         if (CurrentMap.CheckMove(nextPos, this))
         {

@@ -1,16 +1,24 @@
 namespace Project;
 
-public class SelectList
+public class ItemList
 {
-    private List<(string text, Action action)> _menus;
-    private int _currentIndex;
-    public int CurrentIndex{get=> _currentIndex;}
+    protected List<(string text, Action action)> _menus;
+    protected int _currentIndex;
+    protected Border _border;
+    protected int _maxLength;
+    protected int _minWidth = 10;
+    protected Vector _pos;
 
-    private Border _border;
-    private int _maxLength;
-    
+    public int CurrentIndex
+    {
+        get => _currentIndex;
+    }
 
-    public SelectList(params (string, Action)[] menuTexts)
+    protected ItemList()
+    {
+    }
+
+    public ItemList(Vector pos, Vector size, params (string, Action)[] menuTexts)
     {
         if (menuTexts.Length == 0)
         {
@@ -20,39 +28,39 @@ public class SelectList
         {
             _menus = menuTexts.ToList();
         }
-        _border = new Border(width: _maxLength +4, height: _menus.Count);
+
+        _pos = pos;
+        size.X = _minWidth;
+        _border = new Border(pos, size);
     }
-    public void Add(string text, Action action)
+
+    public virtual void Add(string text, Action action)
     {
         _menus.Add((text, action));
-
         int textWidth = text.GetTextWidth();
-        if (_maxLength < textWidth)
+        if (_minWidth <= textWidth && _maxLength < textWidth)
         {
             _maxLength = textWidth;
         }
+
         _border.Width = _maxLength;
-        _border.Height++;
     }
 
-    public void Remove()
+    public virtual void Remove()
     {
         _menus.RemoveAt(_currentIndex);
-        int max = 0;
-        
+        int max = _minWidth;
         //테두리 리사이징
-        foreach ((string text,Action action) in _menus)
+        foreach ((string text, Action action) in _menus)
         {
             int textWidth = text.GetTextWidth();
-            if (max < textWidth) 
+            if (_minWidth <= max && max < textWidth)
                 max = textWidth;
         }
 
         if (_maxLength != max) _maxLength = max;
 
-        _border.Width = _maxLength + 6;
-        _border.Height--;
-
+        _border.Width = _maxLength;
     }
 
     public void Reset()
@@ -66,7 +74,7 @@ public class SelectList
         _menus[_currentIndex].action?.Invoke();
         if (_menus.Count == 0)
             _currentIndex = 0;
-        if (_currentIndex >= _menus.Count) 
+        if (_currentIndex >= _menus.Count)
             _currentIndex = _menus.Count - 1;
     }
 
@@ -83,16 +91,12 @@ public class SelectList
         if (_currentIndex >= _menus.Count) _currentIndex = _menus.Count - 1;
     }
 
-    public void Render(int x, int y)
+    public void Render()
     {
-        _border.X = x;
-        _border.Y = y;
         _border.Draw();
-        
         for (int i = 0; i < _menus.Count; i++)
         {
-            y++;
-            Console.SetCursorPosition(x+2, y);
+            Console.SetCursorPosition(_pos.X + 2, _pos.Y + 1 + i);
             if (i == _currentIndex)
             {
                 "->".Print(ConsoleColor.Green);

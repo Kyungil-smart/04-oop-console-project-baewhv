@@ -14,6 +14,8 @@ public static class InputManager
         ConsoleKey.L,
         ConsoleKey.Subtract,
         ConsoleKey.Add,
+        ConsoleKey.F,
+        ConsoleKey.Spacebar
     };
 
     public static bool GetKey(ConsoleKey input)

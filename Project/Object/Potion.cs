@@ -7,7 +7,7 @@ public class Potion : Item, IInteractable
     public Potion()
     {
         shape = new Shape[1] ;
-        shape[0] = new Shape() { Position = Vector.Zero, Symbol = new StringBuilder("\u2620"), Type = CollisionType.None };
+        shape[0] = new Shape() { Position = Vector.Zero, Symbol = new StringBuilder("\u2365"), Type = CollisionType.None };
     }
     
     public override void Use()

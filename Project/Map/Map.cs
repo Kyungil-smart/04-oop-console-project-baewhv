@@ -18,7 +18,6 @@ public abstract class Map //배치할 월드 데이터
     public Vector StartPos { get; protected set; }
     
     private SortedDictionary<int, GameObject> _objects = new SortedDictionary<int, GameObject>();
-    private List<int> _deleteList = new List<int>(); 
 
     protected Map(Vector startPos, int width = 1, int height = 1)
     {
@@ -35,6 +34,11 @@ public abstract class Map //배치할 월드 데이터
     public void SetObject(GameObject obj)
     {
         _objects[obj.GetPriority(_width, _height)] = obj;
+    }
+
+    public void RemoveObject(int key)
+    {
+        _objects.Remove(key);
     }
 
     public void SetScreen(ScreenFrame frame, PlayerCharacter pc)
@@ -56,12 +60,6 @@ public abstract class Map //배치할 월드 데이터
             }
         }
 
-        foreach (int key in _deleteList)
-        {
-            _objects.Remove(key);
-        }
-        _deleteList.Clear();
-        
         foreach (KeyValuePair<int, GameObject> obj in _objects)
         {
             Vector temp = obj.Value.Position;
@@ -98,6 +96,7 @@ public abstract class Map //배치할 월드 데이터
     {
         if (!CheckRange(pos.X, pos.Y)) return false;
         int temp = -1;
+        
         foreach (KeyValuePair<int, GameObject> obj in _objects)
         {
             if (temp != -1) break;
@@ -107,9 +106,9 @@ public abstract class Map //배치할 월드 데이터
                 {
                     if (sp.Type == CollisionType.Obstacle)
                         return false;
-                    if (obj.Value is IInteractable)
+                    if (obj.Value is IInteractable IntercObj)
                     {
-                        (obj.Value as IInteractable)?.Interact(pc);
+                        IntercObj.Interact(pc);
                         temp = obj.Key;
                         break;
                     }
@@ -118,13 +117,25 @@ public abstract class Map //배치할 월드 데이터
                 }   
             }
         }
-
         if (temp > 0)
         {
-            _deleteList.Add(temp);
-            if (_objects.Remove(temp))
-                return true;
+            _objects.Remove(temp);
         }
         return true;
+    }
+
+    public KeyValuePair<int, GameObject> CheckObject(Vector pos)
+    {
+        foreach (KeyValuePair<int, GameObject> obj in _objects)
+        {
+            foreach (Shape sp in obj.Value.shape)
+            {
+                if ((obj.Value.Position+sp.Position).Compare(pos))
+                {
+                    return obj;
+                }   
+            }
+        }
+        return default;
     }
 }

@@ -23,6 +23,8 @@ public class Vector
 
     public static Vector operator +(Vector a, Vector b)
         => new (a.X + b.X, a.Y + b.Y);
+    public static Vector operator +(Vector a, (int X, int Y) b)
+        => new (a.X + b.X, a.Y + b.Y);
     public static Vector operator -(Vector a, Vector b)
         => new (a.X - b.X, a.Y - b.Y);
     
@@ -33,4 +35,20 @@ public class Vector
         return X == b.X && Y == b.Y;
     }
 
+    public static Vector GetDirectVector(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.Up:
+                return Up;
+            case Direction.Down:
+                return Down;
+            case Direction.Left:
+                return Left;
+            case Direction.Right:
+                return Right;
+            default:
+                return Zero;
+        }
+    }
 }

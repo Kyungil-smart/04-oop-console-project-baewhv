@@ -16,6 +16,10 @@ public class Sword : Item, IInteractable
 
     public void Interact(PlayerCharacter player)
     {
-        //player.equip sword;
+        SkillIcon icon = player.SkillFrame.GetSkillIcon("Attack");
+        icon.Icon = shape[0].Symbol;
+        icon.Visible = true;
+        icon.Color = shape[0].Color;
+        player.SkillFrame.Render();
     }
 }

@@ -4,7 +4,7 @@ public class Inventory
 {
     private List<Item> _items = new List<Item>();
     public bool IsActive { get; set; }
-    public SelectList _itemMenu = new SelectList();
+    public ItemList _itemMenu { get; set; }
     private PlayerCharacter _owner;
 
     public Inventory(PlayerCharacter owner)
@@ -30,8 +30,7 @@ public class Inventory
 
     public void Render()
     {
-        if (!IsActive) return;
-        _itemMenu.Render(70,0);
+        _itemMenu.Render();
     }
 
     public void Select()
