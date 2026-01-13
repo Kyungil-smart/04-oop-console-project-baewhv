@@ -16,7 +16,8 @@ public abstract class Map //배치할 월드 데이터
     public int GetMaxHeight() => (_height - 1) / 2;
 
     public Vector StartPos { get; protected set; }
-    protected SortedDictionary<int, GameObject> Objects = new SortedDictionary<int, GameObject>();
+    
+    private SortedDictionary<int, GameObject> _objects = new SortedDictionary<int, GameObject>();
 
     protected Map(Vector startPos, int width = 1, int height = 1)
     {
@@ -32,7 +33,7 @@ public abstract class Map //배치할 월드 데이터
 
     public void SetObject(GameObject obj)
     {
-        Objects[obj.GetPriority(_width, _height)] = obj;
+        _objects[obj.GetPriority(_width, _height)] = obj;
     }
 
     public void SetScreen(ScreenFrame frame, PlayerCharacter pc)
@@ -54,7 +55,7 @@ public abstract class Map //배치할 월드 데이터
             }
         }
 
-        foreach (KeyValuePair<int, GameObject> obj in Objects)
+        foreach (KeyValuePair<int, GameObject> obj in _objects)
         {
             Vector temp = obj.Value.Position;
             if (temp.X >= LeftMax && temp.Y <= TopMax && temp.X <= LeftMax + frame.GetSize.X * 2 &&
@@ -86,20 +87,35 @@ public abstract class Map //배치할 월드 데이터
                y <= GetMaxHeight();
     }
 
-    public bool CheckMove(Vector pos)
+    public bool CheckMove(Vector pos, PlayerCharacter pc)
     {
         if (!CheckRange(pos.X, pos.Y)) return false;
-        foreach (KeyValuePair<int, GameObject> obj in Objects)
+        int temp = -1;
+        foreach (KeyValuePair<int, GameObject> obj in _objects)
         {
+            if (temp != -1) break;
             foreach (Shape sp in obj.Value.shape)
             {
-                if (sp.Position.Compare(pos) )
+                if ((obj.Value.Position+sp.Position).Compare(pos))
                 {
                     if (sp.Type == CollisionType.Obstacle)
                         return false;
-                    else return true;
+                    if (obj.Value is IInteractable)
+                    {
+                        (obj.Value as IInteractable)?.Interact(pc);
+                        temp = obj.Key;
+                        break;
+                    }
+                    temp = -2;
+                    break;
                 }   
             }
+        }
+
+        if (temp > 0)
+        {
+            if (_objects.Remove(temp))
+                return true;
         }
         return true;
     }
