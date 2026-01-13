@@ -18,6 +18,7 @@ public abstract class Map //배치할 월드 데이터
     public Vector StartPos { get; protected set; }
     
     private SortedDictionary<int, GameObject> _objects = new SortedDictionary<int, GameObject>();
+    private List<int> _deleteList = new List<int>(); 
 
     protected Map(Vector startPos, int width = 1, int height = 1)
     {
@@ -55,6 +56,12 @@ public abstract class Map //배치할 월드 데이터
             }
         }
 
+        foreach (int key in _deleteList)
+        {
+            _objects.Remove(key);
+        }
+        _deleteList.Clear();
+        
         foreach (KeyValuePair<int, GameObject> obj in _objects)
         {
             Vector temp = obj.Value.Position;
@@ -114,6 +121,7 @@ public abstract class Map //배치할 월드 데이터
 
         if (temp > 0)
         {
+            _deleteList.Add(temp);
             if (_objects.Remove(temp))
                 return true;
         }
